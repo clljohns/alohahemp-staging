@@ -1,0 +1,65 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import products from "../../content/products.json";
+
+const { slug } = Astro.params;
+const product = products.find(p => p.slug === slug);
+
+if (!product) {
+  throw new Error("Product not found");
+}
+---
+
+<BaseLayout title={product.name}>
+  <section class="max-w-4xl mx-auto px-4 py-16">
+    <div class="grid md:grid-cols-2 gap-10">
+      <img src={product.image} alt={product.name} class="rounded-2xl border border-slate-800" />
+
+      <div class="space-y-4">
+        <h1 class="text-3xl font-semibold">{product.name}</h1>
+        <p class="text-slate-300 text-sm">{product.description}</p>
+
+        <div class="space-y-2">
+          {product.variations.map(v => (
+            <button
+              data-checkout-amount={v.price}
+              class="block w-full rounded-full bg-emerald-400 px-4 py-2 text-sm font-medium text-slate-950 hover:bg-emerald-300 transition"
+            >
+              Buy {v.name} – ${(v.price/100).toFixed(2)}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    async function startCheckout(amountCents){
+      try{
+        const res = await fetch("/api/square/checkout", {
+          method: "POST",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify({
+            amount: amountCents,
+            currency: "USD",
+            note: "Aloha Hemp Order"
+          })
+        });
+
+        const data = await res.json();
+        if(data?.payment_link?.url){
+          window.location.href = data.payment_link.url;
+        } else {
+          alert("Unable to start checkout.");
+        }
+      } catch (err) {
+        alert("Error starting checkout");
+        console.error(err);
+      }
+    }
+
+    document.querySelectorAll("[data-checkout-amount]").forEach(btn => {
+      btn.addEventListener("click", () => startCheckout(Number(btn.dataset.checkoutAmount)));
+    });
+  </script>
+</BaseLayout>
