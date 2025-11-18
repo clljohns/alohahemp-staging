@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aloha Hemp</title>
+    <meta name="description" content="Premium hemp from Hawaiʻi." />
+  </head>
+  <body class="bg-slate-950 text-slate-100 antialiased">
+    <div class="min-h-screen flex flex-col">
+      <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur">
+        <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3 md:py-4">
+          <a href="/" class="flex items-center gap-2">
+            <div class="h-9 w-9 rounded-full bg-emerald-400/10 border border-emerald-400/40 flex items-center justify-center text-xs font-semibold">AH</div>
+            <div class="flex flex-col leading-tight">
+              <span class="font-semibold text-sm md:text-base">Aloha Hemp</span>
+              <span class="text-[11px] md:text-xs text-slate-400">Premium hemp from Hawaiʻi</span>
+            </div>
+          </a>
+          <nav class="hidden md:flex items-center gap-6 text-sm">
+            <a href="#products" class="hover:text-emerald-300 transition-colors">Shop</a>
+            <a href="#about" class="hover:text-emerald-300 transition-colors">Our Story</a>
+            <a href="#benefits" class="hover:text-emerald-300 transition-colors">Benefits</a>
+          </nav>
+          <button id="mobile-menu-toggle" class="md:hidden inline-flex items-center justify-center rounded-full border border-slate-700 px-3 py-1.5 text-xs">Menu</button>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden border-t border-slate-800 bg-slate-950">
+          <div class="px-4 py-3 flex flex-col gap-2 text-sm">
+            <a href="#products" class="py-1">Shop</a>
+            <a href="#about" class="py-1">Our Story</a>
+            <a href="#benefits" class="py-1">Benefits</a>
+          </div>
+        </div>
+      </header>
+      <main class="flex-1">
+        <slot />
+      </main>
+      <footer class="border-t border-slate-800 mt-16">
+        <div class="max-w-6xl mx-auto px-4 py-6 text-xs md:text-sm text-slate-400 flex flex-col md:flex-row gap-2 md:items-center md:justify-between">
+          <span>© Aloha Hemp</span>
+          <span class="flex gap-4">
+            <a href="#about" class="hover:text-emerald-300">About</a>
+            <a href="#benefits" class="hover:text-emerald-300">Learn</a>
+          </span>
+        </div>
+      </footer>
+    </div>
+    <script>
+      const toggle=document.getElementById("mobile-menu-toggle");
+      const menu=document.getElementById("mobile-menu");
+      if(toggle&&menu){toggle.addEventListener("click",()=>menu.classList.toggle("hidden"))}
+    </script>
+  </body>
+</html>

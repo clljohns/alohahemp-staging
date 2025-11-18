@@ -1,16 +1,52 @@
 ---
-
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
+<BaseLayout>
+  <section class="max-w-6xl mx-auto px-4 pt-10 pb-12 grid md:grid-cols-2 gap-10 items-center">
+    <div class="space-y-5">
+      <p class="text-xs uppercase tracking-[0.2em] text-emerald-300/80">Hawaiʻi Grown • Small Batch</p>
+      <h1 class="text-3xl md:text-5xl font-semibold tracking-tight">Calm, clarity, and relief <span class="block text-emerald-300">from premium hemp botanicals.</span></h1>
+      <p class="text-sm text-slate-300 max-w-lg">Aloha Hemp crafts oil tinctures, topicals, and gummies with full-spectrum hemp and intentional formulations.</p>
+      <div class="flex gap-3 pt-2">
+        <button data-checkout-amount="5900" class="inline-flex items-center rounded-full bg-emerald-400 px-4 py-2 text-sm font-medium text-slate-950 shadow-lg hover:bg-emerald-300 transition">Quick Checkout – Signature Oil</button>
+        <a href="#products" class="inline-flex items-center rounded-full border border-slate-700 px-4 py-2 text-sm hover:border-emerald-300 hover:text-emerald-200 transition">Browse all products</a>
+      </div>
+    </div>
+    <div class="relative rounded-3xl border border-emerald-300/30 bg-gradient-to-br from-slate-900 to-slate-950 p-6">
+      <h3 class="text-sm font-semibold mb-2">Signature Full-Spectrum Hemp Oil</h3>
+      <p class="text-xs text-slate-300 mb-3">Balanced cannabinoids and terpenes for calm and sleep support.</p>
+      <button data-checkout-amount="5900" class="inline-flex items-center rounded-full bg-emerald-400 px-4 py-2 text-xs font-medium text-slate-950 hover:bg-emerald-300 transition">Buy with Square</button>
+    </div>
+  </section>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+  <section id="products" class="max-w-6xl mx-auto px-4 pb-16">
+    <h2 class="text-xl md:text-2xl font-semibold mb-4">Shop Aloha Hemp</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <article class="rounded-3xl border border-slate-800 bg-slate-900/60 p-4 flex flex-col justify-between">
+        <h3 class="text-sm font-semibold mb-1">Signature Full-Spectrum Oil</h3>
+        <button data-checkout-amount="5900" class="inline-flex items-center rounded-full bg-emerald-400 px-3 py-1.5 text-[11px] font-medium text-slate-950 hover:bg-emerald-300 transition">Quick Buy</button>
+      </article>
+      <article class="rounded-3xl border border-slate-800 bg-slate-900/60 p-4 flex flex-col justify-between">
+        <h3 class="text-sm font-semibold mb-1">Relief Topical Balm</hh3>
+        <button data-checkout-amount="3900" class="inline-flex items-center rounded-full bg-emerald-400 px-3 py-1.5 text-[11px] font-medium text-slate-950 hover:bg-emerald-300 transition">Quick Buy</button>
+      </article>
+      <article class="rounded-3xl border border-slate-800 bg-slate-900/60 p-4 flex flex-col justify-between">
+        <h3 class="text-sm font-semibold mb-1">Nighttime Gummies</h3>
+        <button data-checkout-amount="4900" class="inline-flex items-center rounded-full bg-emerald-400 px-3 py-1.5 text-[11px] font-medium text-slate-950 hover:bg-emerald-300 transition">Quick Buy</button>
+      </article>
+    </div>
+  </section>
+
+  <script>
+    async function startCheckout(amountCents){
+      try{
+        const res=await fetch("/api/square/checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({amount:amountCents,currency:"USD",note:"Aloha Hemp Order"})});
+        const data=await res.json();
+        if(data?.payment_link?.url){window.location.href=data.payment_link.url}else{alert("Unable to start checkout.");}
+      }catch(err){console.error(err);alert("Checkout error.");}
+    }
+    document.querySelectorAll("[data-checkout-amount]").forEach(btn=>{
+      btn.addEventListener("click",()=>startCheckout(Number(btn.dataset.checkoutAmount)))
+    });
+  </script>
+</BaseLayout>
